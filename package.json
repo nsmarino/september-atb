@@ -40,5 +40,9 @@
     "typescript": "^4.8.2",
     "vite": "^3.0.9",
     "vite-plugin-glsl": "^0.3.0"
+  },
+  "dependencies": {
+    "@splinetool/runtime": "^0.9.109",
+    "gsap": "^3.11.1"
   }
 }
