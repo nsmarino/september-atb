@@ -8,11 +8,24 @@ function log(text) {
     logEl.insertBefore(para, logEl.firstChild)
 }
 
+// blueprint
+class Wallet {
+    constructor() {
+        // describes contents
+        this.dollars = 10
+    }
+}
+
+// example 
+const myWallet = new Wallet()
+myWallet.dollars // 10
+log(myWallet.dollars)
+
+
 export default class BattleController {
     constructor() {
         this.members = []
         this._phase = "start"
-        this._activeMember = null
 
         this.draftPlayerAction = null // makes it possible to select a target. selecting a target adds the draft action to this.actions
 

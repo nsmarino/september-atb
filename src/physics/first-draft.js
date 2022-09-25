@@ -1,10 +1,8 @@
 import * as THREE from 'three'
-import { renderer, scene } from './core/renderer'
-import { fpsGraph, gui } from './core/gui'
-import camera from './core/camera'
-import { controls } from './core/orbit-control'
-
-import './style.css'
+import { renderer, scene } from '../core/renderer'
+import { fpsGraph, gui } from '../core/gui'
+import camera from '../core/camera'
+import { controls } from '../core/orbit-control'
 
 // Shaders
 import vertexShader from '/@/shaders/vertex.glsl'
@@ -48,7 +46,7 @@ const DirectionalLightFolder = gui.addFolder({
 Object.keys(directionalLight.position).forEach(key => {
   DirectionalLightFolder.addInput(
     directionalLight.position,
-    key as keyof THREE.Vector3,
+    key,
     {
       min: -100,
       max: 100,
@@ -68,8 +66,6 @@ scene.add(plane)
 
 const clock = new THREE.Clock()
 
-
-// LOOP:
 const loop = () => {
   const elapsedTime = clock.getElapsedTime()
 
@@ -84,4 +80,5 @@ const loop = () => {
   requestAnimationFrame(loop)
 }
 
+console.log("first draft")
 loop()
