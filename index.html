@@ -4,19 +4,125 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modern ThreeJS ⚡️</title>
+    <title>Chrono Wotlk Deaconing</title>
   </head>
   <body>
-    <img src="favicon.svg" alt="Modern ThreeJS" class="logo" />
-    <canvas id="webgl"></canvas>
-    <footer class="footer">
-      Made by
-      <a href="https://github.com/alvarosabu" target="_blank"
-        >Alvaro Saburido</a
-      >
-      with <a href="https://threejs.org/" target="_blank">ThreeJS</a> powered by
-      <a href="https://vitejs.dev/" target="_blank">ViteJS ⚡️</a>
-    </footer>
-    <script type="module" src="/src/main.ts"></script>
+
+    <!-- <div id="narrative">
+      <div class="dialogue">
+        Player 1: This game is freaking awesome.
+      </div>
+    </div> -->
+    <div id="battle">
+      <div class="battleMember" data-player="true" data-id="1" data-hp="20" data-mp="10" data-speed="70">
+        <p class="avatar">Player 1</p>
+
+        <div class="attributes">
+          <div><span class="current-hp"></span> / <span class="total-hp"></span> HP</div>
+          <div><span class="current-mp"></span> / <span class="total-mp"></span> MP</div>
+        </div>
+
+        <div class="meter">
+          <div class="progress"></div>
+        </div>
+        <div class="actionList">
+          <button 
+            class="actionBtn"
+            data-name="Normal Attack"
+            data-dmg="5"
+            data-mp="0"
+          >Normal Attack</button>
+          <button 
+            class="actionBtn"
+            data-name="Fire Attack"
+            data-dmg="10"
+            data-mp="5"
+          >Fire Attack</button>
+        </div>
+      </div>
+
+      <div class="battleMember" data-player="true" data-id="2" data-hp="20" data-mp="10" data-speed="15">
+        <p class="avatar">Player 2</p>
+        <div class="attributes">
+          <div><span class="current-hp"></span> / <span class="total-hp"></span> HP</div>
+          <div><span class="current-mp"></span> / <span class="total-mp"></span> MP</div>
+        </div>
+        <div class="meter">
+          <div class="progress"></div>
+        </div>
+
+        <div class="actionList">
+          <button 
+            class="actionBtn"
+            data-name="Normal Attack"
+            data-dmg="5"
+            data-mp="0"
+          >Normal Attack</button>
+          <button 
+            class="actionBtn"
+            data-name="Fire Attack"
+            data-dmg="10"
+            data-mp="5"
+          >Fire Attack</button>
+        </div>
+      </div>
+
+      <div class="battleMember" data-player="false" data-id="3" data-hp="20" data-mp="10" data-speed="80">
+        <p class="avatar">Enemy 1</p>
+        <div class="attributes">
+          <div><span class="current-hp"></span> / <span class="total-hp"></span> HP</div>
+          <div><span class="current-mp"></span> / <span class="total-mp"></span> MP</div>
+        </div>
+        <div class="meter">
+          <div class="progress"></div>
+        </div>
+
+        <div class="actionList">
+          <button 
+            class="actionBtn"
+            data-name="Normal Attack"
+            data-dmg="25"
+            data-mp="0"
+          >Normal Attack</button>
+          <button 
+            class="actionBtn"
+            data-name="Fire Attack"
+            data-dmg="25"
+            data-mp="5"
+          >Fire Attack</button>
+        </div>
+      </div>
+
+      <div class="battleMember" data-player="false" data-id="4" data-hp="20" data-mp="10" data-speed="10">
+        <p class="avatar">Enemy 2</p>
+        <div class="attributes">
+          <div><span class="current-hp"></span> / <span class="total-hp"></span> HP</div>
+          <div><span class="current-mp"></span> / <span class="total-mp"></span> MP</div>
+        </div>
+        <div class="meter">
+          <div class="progress"></div>
+        </div>
+
+        <div class="actionList">
+          <button 
+            class="actionBtn"
+            data-name="Normal Attack"
+            data-dmg="25"
+            data-mp="0"
+          >Normal Attack</button>
+          <button 
+            class="actionBtn"
+            data-name="Fire Attack"
+            data-dmg="25"
+            data-mp="5"
+          >Fire Attack</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="log"></div>
+    <script type="module" src="/src/atb.js"></script>
+    <!-- <canvas id="webgl"></canvas> -->
+    <!-- <script type="module" src="/src/main.ts"></script> -->
   </body>
 </html>

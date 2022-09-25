@@ -42,6 +42,7 @@
     "vite-plugin-glsl": "^0.3.0"
   },
   "dependencies": {
+    "@sanity/client": "^3.4.1",
     "@splinetool/runtime": "^0.9.109",
     "gsap": "^3.11.1"
   }

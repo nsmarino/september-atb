@@ -2,26 +2,44 @@ body {
   margin: 0;
 }
 
-.logo {
-  width: 32px;
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
+#narrative {
+  display: none;
 }
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  padding: 1rem 0;
+#battle {
   display: flex;
   justify-content: center;
-  width: 100%;
-  color: #646464;
-  font-size: 0.8rem;
+  margin: 2rem;
+  padding: 1rem;
+  gap: 4rem;
+  background-color: whitesmoke;
 }
 
-.footer a {
-  color: #6b84cc;
-  text-decoration: none;
-  margin: 0 0.25rem;
+[data-player="true"] .avatar {
+  background: lightblue;
+  height: 8rem;
 }
+[data-player="false"] .avatar {
+  background: lightcoral;
+  height: 8rem;
+}
+
+.meter {
+  height: 10px;
+  width: 200px;
+  background-color: lightgray;
+  margin: 1rem 0;
+}
+[data-player="true"] .meter .progress {
+  background-color: dodgerblue;
+  height: 100%;
+
+}
+
+[data-player="false"] .meter .progress {
+  background-color: crimson;
+  height: 100%;
+}
+
+.log { margin-left: 2rem;}
+
