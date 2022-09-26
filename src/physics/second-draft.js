@@ -65,7 +65,7 @@ const sphereMaterial = new THREE.ShaderMaterial({
 // sphere.castShadow = true
 // scene.add(sphere)
 
-// const plane = utils.createPlane(scene)
+const plane = utils.createPlane(scene)
 
 
 const physicsWorld = new CANNON.World({
@@ -74,14 +74,29 @@ const physicsWorld = new CANNON.World({
 
 // create a ground body with a static plane
 const groundBody = new CANNON.Body({
-  type: CANNON.Body.STATIC,
+  // type: CANNON.Body.STATIC,
   // infinte geometric plane
   shape: new CANNON.Plane(),
 });
 
 // rotate ground body by 90 degrees
 groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+groundBody.position.y = -5
 physicsWorld.addBody(groundBody);
+// When a body collides with another body, they both dispatch the "collide" event.
+groundBody.addEventListener('collide', (event) => {
+  console.log('The sphere just collided with the ground!')
+  console.log('Collided with body:', event.body)
+  event.body.position.set(0,7,0)
+  console.log('Contact between bodies:', event.contact)
+})
+
+
+const platformBody = new CANNON.Body({
+  shape: new CANNON.Box(new CANNON.Vec3(10, 10, 0.1)),
+});
+platformBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+physicsWorld.addBody(platformBody);
 
 // create a sphere and set it at y=10
 const radius = 1;
