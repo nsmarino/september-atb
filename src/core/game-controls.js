@@ -4,23 +4,14 @@ import * as CANNON from "cannon-es"
 class GameControls extends THREE.EventDispatcher {
   constructor(camera, cannonBody) {
     super()
-
+    this.camera = camera
     this.enabled = false
+    this.dir = new THREE.Vector3()
 
     this.cannonBody = cannonBody
 
-    // var eyeYPos = 2 // eyes are 2 meters above the ground
-    this.velocityFactor = 0.2
-    this.jumpVelocity = 20
-
-    this.pitchObject = new THREE.Object3D()
-    this.pitchObject.add(camera)
-
-    this.yawObject = new THREE.Object3D()
-    this.yawObject.position.y = 2
-    this.yawObject.add(this.pitchObject)
-
-    this.quaternion = new THREE.Quaternion()
+    this.speed = 0.1
+    this.jumpVelocity = 10
 
     this.moveForward = false
     this.moveBackward = false
@@ -53,71 +44,12 @@ class GameControls extends THREE.EventDispatcher {
 
     this.velocity = this.cannonBody.velocity
 
-    // Moves the camera to the cannon.js object position and adds velocity to the object if the run key is down
-    this.inputVelocity = new THREE.Vector3()
-    this.euler = new THREE.Euler()
-
-    this.lockEvent = { type: 'lock' }
-    this.unlockEvent = { type: 'unlock' }
-
     this.connect()
   }
 
   connect() {
-    document.addEventListener('mousemove', this.onMouseMove)
-    document.addEventListener('pointerlockchange', this.onPointerlockChange)
-    document.addEventListener('pointerlockerror', this.onPointerlockError)
     document.addEventListener('keydown', this.onKeyDown)
     document.addEventListener('keyup', this.onKeyUp)
-  }
-
-  disconnect() {
-    document.removeEventListener('mousemove', this.onMouseMove)
-    document.removeEventListener('pointerlockchange', this.onPointerlockChange)
-    document.removeEventListener('pointerlockerror', this.onPointerlockError)
-    document.removeEventListener('keydown', this.onKeyDown)
-    document.removeEventListener('keyup', this.onKeyUp)
-  }
-
-  dispose() {
-    this.disconnect()
-  }
-
-  lock() {
-    document.body.requestPointerLock()
-  }
-
-  unlock() {
-    document.exitPointerLock()
-  }
-
-  onPointerlockChange = () => {
-    if (document.pointerLockElement) {
-      this.dispatchEvent(this.lockEvent)
-
-      this.isLocked = true
-    } else {
-      this.dispatchEvent(this.unlockEvent)
-
-      this.isLocked = false
-    }
-  }
-
-  onPointerlockError = () => {
-    console.error('PointerLockControlsCannon: Unable to use Pointer Lock API')
-  }
-
-  onMouseMove = (event) => {
-    if (!this.enabled) {
-      return
-    }
-
-    const { movementX, movementY } = event
-
-    this.yawObject.rotation.y -= movementX * 0.002
-    this.pitchObject.rotation.x -= movementY * 0.002
-
-    this.pitchObject.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.pitchObject.rotation.x))
   }
 
   onKeyDown = (event) => {
@@ -175,52 +107,24 @@ class GameControls extends THREE.EventDispatcher {
     }
   }
 
-  getObject() {
-    return this.yawObject
-  }
-
-  getDirection() {
-    const vector = new CANNON.Vec3(0, 0, -1)
-    vector.applyQuaternion(this.quaternion)
-    return vector
-  }
-
-  update(delta) {
+  update(camera) {
     if (this.enabled === false) {
       return
     }
 
-    delta *= 1000
-    delta *= 0.1
-
-    this.inputVelocity.set(0, 0, 0)
-
     if (this.moveForward) {
-      this.inputVelocity.z = -this.velocityFactor * delta
+      this.cannonBody.position.z -= this.dir.z
     }
     if (this.moveBackward) {
-      this.inputVelocity.z = this.velocityFactor * delta
+      this.cannonBody.position.z += this.speed
     }
 
     if (this.moveLeft) {
-      this.inputVelocity.x = -this.velocityFactor * delta
+      this.cannonBody.position.x -= this.speed
     }
     if (this.moveRight) {
-      this.inputVelocity.x = this.velocityFactor * delta
+      this.cannonBody.position.x += this.speed
     }
-
-    // Convert velocity to world coordinates
-    this.euler.x = this.pitchObject.rotation.x
-    this.euler.y = this.yawObject.rotation.y
-    this.euler.order = 'XYZ'
-    this.quaternion.setFromEuler(this.euler)
-    this.inputVelocity.applyQuaternion(this.quaternion)
-
-    // Add to the object
-    this.velocity.x += this.inputVelocity.x
-    this.velocity.z += this.inputVelocity.z
-
-    this.yawObject.position.copy(this.cannonBody.position)
   }
 }
 

@@ -3,7 +3,7 @@ import * as CANNON from "cannon-es"
 import CannonDebugger from 'cannon-es-debugger';
 import { renderer, scene } from '../core/renderer'
 import { fpsGraph, gui } from '../core/gui'
-import camera from '../core/camera'
+import camera, { gameCamera } from '../core/camera'
 import { controls, persControls } from '../core/orbit-control'
 import * as utils from './utils'
 import "../style.css"
@@ -11,6 +11,11 @@ import introWav from '../../assets/intro.wav'
 import click from '../../assets/click.wav'
 
 import GameObject from './gameObject';
+import { GameControls } from '../core/game-controls';
+
+// Shaders
+import vertexShader from '/@/shaders/vertex.glsl'
+import fragmentShader from '/@/shaders/fragment.glsl'
 
 // AUDIO
 const myAudio = document.createElement("audio");
@@ -25,10 +30,6 @@ document.querySelectorAll("button").forEach(btn => {
     btnFx.play()
   })
 })
-
-// Shaders
-import vertexShader from '/@/shaders/vertex.glsl'
-import fragmentShader from '/@/shaders/fragment.glsl'
 
 // Place lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
@@ -126,18 +127,16 @@ const boxBody = new CANNON.Body({
 });
 boxBody.position.copy(boxMesh.position);
 
-
-
 const gameObject = new GameObject()
 gameObject.addMesh(boxMesh, scene)
 gameObject.addBody(boxBody, physicsWorld)
 
-
-
+const gameControls = new GameControls(gameCamera, gameObject.body)
+gameControls.enabled = true
 const clock = new THREE.Clock()
+
 // LOOP
 const loop = () => {
-
   // for shader
   const elapsedTime = clock.getElapsedTime()
   sphereMaterial.uniforms.uTime.value = elapsedTime
@@ -149,6 +148,8 @@ const loop = () => {
 
   fpsGraph.begin() // wrap around renderer
 
+  gameControls.update(gameCamera)
+
   controls.update()
   persControls.update()
   const cameraToRender = camera()
@@ -158,5 +159,5 @@ const loop = () => {
   requestAnimationFrame(loop)
 }
 
-console.log("third draft")
+console.log("fourth draft")
 loop()
