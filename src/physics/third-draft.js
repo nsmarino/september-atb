@@ -10,20 +10,22 @@ import * as utils from './utils'
 import "../style.css"
 import introWav from '../../assets/intro.wav'
 import click from '../../assets/click.wav'
+
+import GameObject from './gameObject';
+
+// AUDIO
 const myAudio = document.createElement("audio");
 myAudio.src = introWav;
+// document.addEventListener("click", () => myAudio.play())
 
 const btnFx = document.createElement("audio");
 btnFx.src = click
 btnFx.volume = 0.2
-document.addEventListener("click", () => myAudio.play())
-
 document.querySelectorAll("button").forEach(btn => {
   btn.addEventListener("click", () => {
     btnFx.play()
   })
 })
-// myAudio.pause();
 
 // Shaders
 import vertexShader from '/@/shaders/vertex.glsl'
@@ -83,10 +85,10 @@ const groundBody = new CANNON.Body({
 groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
 groundBody.position.y = -5
 physicsWorld.addBody(groundBody);
-// When a body collides with another body, they both dispatch the "collide" event.
+// When a body collides with another body, they BOTH dispatch the "collide" event.
 groundBody.addEventListener('collide', (event) => {
-  console.log('The sphere just collided with the ground!')
-  console.log('Collided with body:', event.body)
+  console.log('The groundBody emits this event.')
+  console.log('The event.body is the other body that the groundBody collides with.', event.body)
   event.body.position.set(0,7,0)
   console.log('Contact between bodies:', event.contact)
 })
@@ -111,21 +113,25 @@ const cannonDebugger = new CannonDebugger(scene, physicsWorld, {
   // color: 0xff0000,
 });
 
-// BOX::::
 
-// box Body
+// EXAMPLE MESH (The following section imitates what I'd load from GLTF)
+const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
+const boxMaterial = new THREE.MeshNormalMaterial();
+const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+boxMesh.position.set(1,10,0)
+////////////////////////////////////////////////////////////////
+
 const boxBody = new CANNON.Body({
   mass: 5,
   shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
 });
-boxBody.position.set(1, 10, 0);
-physicsWorld.addBody(boxBody);
+boxBody.position.copy(boxMesh.position);
 
-// box Mesh (unpositioned)
-const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
-const boxMaterial = new THREE.MeshNormalMaterial();
-const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-scene.add(boxMesh);
+
+
+const gameObject = new GameObject()
+gameObject.addMesh(boxMesh, scene)
+gameObject.addBody(boxBody, physicsWorld)
 
 
 
@@ -140,10 +146,7 @@ const loop = () => {
   physicsWorld.fixedStep();
   cannonDebugger.update();
 
-  // update meshes
-  boxMesh.position.copy(boxBody.position);
-  boxMesh.quaternion.copy(boxBody.quaternion);
-
+  gameObject.update()
 
   fpsGraph.begin() // wrap around renderer
 
@@ -156,5 +159,5 @@ const loop = () => {
   requestAnimationFrame(loop)
 }
 
-console.log("second draft")
+console.log("third draft")
 loop()
