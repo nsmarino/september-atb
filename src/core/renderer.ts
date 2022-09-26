@@ -13,6 +13,7 @@ export const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
 }
+console.log(sizes)
 
 // Scene
 export const scene = new Scene()
@@ -36,7 +37,7 @@ renderer.toneMapping = ACESFilmicToneMapping
 renderer.toneMappingExposure = 1
 
 // Axes Helper
-const axesHelper = new AxesHelper()
+const axesHelper = new AxesHelper(10)
 scene.add(axesHelper)
 
 gui.addInput(axesHelper, 'visible', {
@@ -44,6 +45,7 @@ gui.addInput(axesHelper, 'visible', {
 })
 
 function updateRenderer() {
+
   renderer.setSize(sizes.width, sizes.height)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // To avoid performance problems on devices with higher pixel ratio
 }

@@ -44,6 +44,8 @@
   "dependencies": {
     "@sanity/client": "^3.4.1",
     "@splinetool/runtime": "^0.9.109",
+    "cannon-es": "^0.20.0",
+    "cannon-es-debugger": "^1.0.0",
     "gsap": "^3.11.1"
   }
 }
