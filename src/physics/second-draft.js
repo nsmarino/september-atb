@@ -8,6 +8,13 @@ import camera from '../core/camera'
 import { controls, persControls } from '../core/orbit-control'
 import * as utils from './utils'
 import "../style.css"
+
+const myAudio = document.createElement("audio");
+myAudio.src = "assets/intro.wav";
+document.addEventListener("click", () => myAudio.play())
+myAudio.play();
+// myAudio.pause();
+
 // Shaders
 import vertexShader from '/@/shaders/vertex.glsl'
 import fragmentShader from '/@/shaders/fragment.glsl'
