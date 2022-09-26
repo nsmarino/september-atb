@@ -9,10 +9,20 @@ import { controls, persControls } from '../core/orbit-control'
 import * as utils from './utils'
 import "../style.css"
 import introWav from '../../assets/intro.wav'
+import click from '../../assets/click.wav'
 const myAudio = document.createElement("audio");
 myAudio.src = introWav;
+
+const btnFx = document.createElement("audio");
+btnFx.src = click
+btnFx.volume = 0.2
 document.addEventListener("click", () => myAudio.play())
-myAudio.play();
+
+document.querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    btnFx.play()
+  })
+})
 // myAudio.pause();
 
 // Shaders
