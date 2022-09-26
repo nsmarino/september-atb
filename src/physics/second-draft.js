@@ -8,9 +8,9 @@ import camera from '../core/camera'
 import { controls, persControls } from '../core/orbit-control'
 import * as utils from './utils'
 import "../style.css"
-
+import introWav from '../../assets/intro.wav'
 const myAudio = document.createElement("audio");
-myAudio.src = "assets/intro.wav";
+myAudio.src = introWav;
 document.addEventListener("click", () => myAudio.play())
 myAudio.play();
 // myAudio.pause();
