@@ -8,21 +8,45 @@ let perspectiveCamera = new PerspectiveCamera(
   VERTICAL_FIELD_OF_VIEW,
   sizes.width / sizes.height,
 )
+perspectiveCamera.position.set(9, 4, 9)
+perspectiveCamera.lookAt(0, 0, 0); 
+
+let gameCamera = new PerspectiveCamera(
+  VERTICAL_FIELD_OF_VIEW,
+  sizes.width / sizes.height,
+)
+gameCamera.position.set(9, 4, 9)
+gameCamera.lookAt(0, 0, 0); 
+
+
 let orthoCamera = new OrthographicCamera( 
   sizes.width / - 2, 
   sizes.width / 2, 
   sizes.height / 2, 
-  sizes.height / - 2, 1, 500 );
-
-perspectiveCamera.position.set(9, 4, 9)
-
+  sizes.height / - 2, 1, 500 
+)
 orthoCamera.position.set( 60, 30, 70 );
 orthoCamera.lookAt(0, 0, 0); 
-orthoCamera.zoom = 40     // have camera look at 0,0,0
+orthoCamera.zoom = 40
 
-const camera = () => pers ? perspectiveCamera : orthoCamera
+const camera = () => {
+  switch (cameraType) {
+    case "perspective":
+      return perspectiveCamera
+      break;
+    case "orthographic":
+      return orthoCamera
+      break;
+    case "game":
+      return gameCamera
+      break;
+    default:
+      return perspectiveCamera
+  }
+  // pers ? perspectiveCamera : orthoCamera
+}
 
-let pers = true
+let cameraType = "perspective"
 
 const persBtn = gui.addButton({
   title: 'perspective',
@@ -32,10 +56,10 @@ persBtn.controller_.view.element.style.background = "green"
 
 persBtn.on('click', () => {
   orthoBtn.controller_.view.element.style.background = "transparent"
+  gameBtn.controller_.view.element.style.background = "transparent"
   persBtn.controller_.view.element.style.background = "green"
-
   perspectiveCamera.updateProjectionMatrix()
-  pers = true
+  cameraType = "perspective"
 });
 
 const orthoBtn = gui.addButton({
@@ -43,12 +67,24 @@ const orthoBtn = gui.addButton({
 });
 
 orthoBtn.on('click', () => {
-  console.log(orthoBtn.controller_.view.valueElement)
   orthoBtn.controller_.view.element.style.background = "green"
   persBtn.controller_.view.element.style.background = "transparent"
-
+  gameBtn.controller_.view.element.style.background = "transparent"
   orthoCamera.updateProjectionMatrix()
-  pers = false
+  cameraType = "orthographic"
+});
+
+const gameBtn = gui.addButton({
+  title: 'game',
+});
+
+gameBtn.on('click', () => {
+  gameBtn.controller_.view.element.style.background = "green"
+  persBtn.controller_.view.element.style.background = "transparent"
+  orthoBtn.controller_.view.element.style.background = "transparent"
+
+  gameCamera.updateProjectionMatrix()
+  cameraType = "game"
 });
 
 gui.addSeparator()
@@ -57,9 +93,10 @@ window.addEventListener('resize', () => {
   sizes.width = window.innerWidth
   sizes.height = window.innerHeight
   perspectiveCamera.aspect = sizes.width / sizes.height
+  gameCamera.aspect = sizes.width / sizes.height
   camera().updateProjectionMatrix()
 })
 
 scene.add(camera())
-export { perspectiveCamera, orthoCamera, camera }
+export { perspectiveCamera, orthoCamera, gameCamera, camera }
 export default camera
