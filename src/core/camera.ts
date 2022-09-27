@@ -15,9 +15,6 @@ let gameCamera = new PerspectiveCamera(
   VERTICAL_FIELD_OF_VIEW,
   sizes.width / sizes.height,
 )
-gameCamera.position.set(9, 4, 9)
-gameCamera.lookAt(0, 0, 0); 
-
 
 let orthoCamera = new OrthographicCamera( 
   sizes.width / - 2, 
