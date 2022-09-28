@@ -73,7 +73,7 @@ const plane = utils.createPlane(scene)
 
 
 const physicsWorld = new CANNON.World({
-  gravity: new CANNON.Vec3(0, -9.82, 0),
+  gravity: new CANNON.Vec3(0, -10, 0),
 });
 
 // create a ground body with a static plane
@@ -124,7 +124,7 @@ boxMesh.position.set(1,10,0)
 ////////////////////////////////////////////////////////////////
 
 const boxBody = new CANNON.Body({
-  mass: 5,
+  mass: 100,
   shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
 });
 boxBody.position.copy(boxMesh.position);
@@ -156,11 +156,17 @@ const followCam = new THREE.Object3D();
 followCam.position.copy(gameCamera.position);
 
 const playerBody = new CANNON.Body({
-  mass: 5,
-  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
+  mass: 300,
+  shape: new CANNON.Cylinder(1,1,2),
 });
-// playerBody.position.copy(boxMesh.position);
+playerBody.angularDamping = 0.99
+playerBody.position.copy(body.position);
+playerBody.position.y += 2
 physicsWorld.addBody(playerBody);
+
+
+
+playerBody.add
 
 
 player.add(followCam);
@@ -185,6 +191,9 @@ function keyDown(evt){
     case 68://D
       turn = -1;
       break;
+    case 69://D
+      playerBody.velocity.y = 5
+      break;
   }
   
   playerControl(forward, turn);
@@ -193,7 +202,6 @@ function keyDown(evt){
 function keyUp(evt){
   let forward = (player.userData!==undefined && player.userData.move!==undefined) ? player.userData.move.forward : 0;
   let turn = (player.move!=undefined && player.userData.move!==undefined) ?  player.userData.move.turn : 0;
-  
   switch(evt.keyCode){
     case 87://W
       forward = 0;
@@ -221,9 +229,11 @@ function playerControl(forward, turn){
  }
 }
 
-const moveSpeed = 250
+const moveSpeed = 200
 const turnSpeed = 150
 const clock = new THREE.Clock()
+
+const vector = new THREE.Vector3()
 
 // LOOP
 const loop = () => {
@@ -231,8 +241,28 @@ const loop = () => {
   const elapsedTime = clock.getElapsedTime()
   sphereMaterial.uniforms.uTime.value = elapsedTime
 
+  // player.position.copy(playerBody.position);
+  // player.position.y = player.position.y - 1
+  // player.quaternion.copy(playerBody.quaternion);
+
   physicsWorld.fixedStep();
   cannonDebugger.update();
+
+  const dt = clock.getDelta();
+  if (player.userData!==undefined && player.userData.move!==undefined){
+    // Mesh
+    // Move in direction of camera
+    player.translateZ(player.userData.move.forward * dt * moveSpeed);
+    player.rotateY(player.userData.move.turn * dt * turnSpeed);
+
+    // Physics body
+    // playerBody.position.copy(player.position)
+    // playerBody.position.x = player.position.x
+    // playerBody.position.z = player.position.z
+
+    playerBody.quaternion.copy(player.quaternion);
+  }
+
 
   gameObject.update()
 
@@ -241,14 +271,9 @@ const loop = () => {
   controls.update()
   persControls.update()
 
-  const dt = clock.getDelta();
 
-  if (player.userData!==undefined && player.userData.move!==undefined){
-    player.translateZ(player.userData.move.forward * dt * moveSpeed);
-    player.rotateY(player.userData.move.turn * dt * turnSpeed);
-  }
   
-  gameCamera.position.lerp(followCam.getWorldPosition(new THREE.Vector3()), 0.05);
+  gameCamera.position.lerp(followCam.getWorldPosition(new THREE.Vector3()), 0.1);
   const pos = player.position.clone();
   pos.y += 3;
   gameCamera.lookAt(pos);
