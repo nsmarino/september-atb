@@ -7,7 +7,20 @@
     <title>PHYSICS | cwd</title>
   </head>
 <body>
-    <canvas id="webgl"></canvas>
-    <script type="module" src="/src/physics/fourth-draft.js"></script>
+
+  <div id="narrative-controller" style="opacity: 0; pointer-events: none;">
+    <div class="text-container"></div>
+    <button class="close-btn">x</button>
+    <button class="next-btn">next</button>
+  </div>
+
+  <canvas id="webgl"></canvas>
+
+  <script type="module" src="content/sanity-client.js"></script>
+
+  <!-- <script type="module" src="/src/physics/surfer-controls.js"></script> -->
+  <!-- <script type="module" src="/src/physics/fourth-draft.js"></script>
+  <script type="module" src="/src/controllers/NarrativeController.js"></script> -->
+
 </body>
 </html>

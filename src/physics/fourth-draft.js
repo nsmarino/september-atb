@@ -9,7 +9,9 @@ import * as utils from './utils'
 import "../style.css"
 import introWav from '../../assets/intro.wav'
 import click from '../../assets/click.wav'
+import gsap from "gsap"
 
+import NarrativeController from '../controllers/NarrativeController';
 import GameObject from './gameObject';
 
 // Shaders
@@ -120,6 +122,24 @@ const cannonDebugger = new CannonDebugger(scene, physicsWorld, {
 const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
 const boxMaterial = new THREE.MeshNormalMaterial();
 const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+
+const example = [
+  {
+      id: 1,
+      text: "Example text"
+  },
+  {
+      id: 2,
+      text: "2 Example text 2"
+  }
+]
+boxMesh.narrativeContent = example
+boxMesh.callback = function() {
+  console.log(this.narrativeContent)
+  const narrativeController = new NarrativeController(example)
+  narrativeController.open()
+}
+
 boxMesh.position.set(1,10,0)
 ////////////////////////////////////////////////////////////////
 
@@ -132,6 +152,7 @@ boxBody.position.copy(boxMesh.position);
 const gameObject = new GameObject()
 gameObject.addMesh(boxMesh, scene)
 gameObject.addBody(boxBody, physicsWorld)
+
 
 
 // FOLLOWCAM FOR GAME MODE
@@ -234,6 +255,42 @@ const turnSpeed = 150
 const clock = new THREE.Clock()
 
 const vector = new THREE.Vector3()
+
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+
+function onDocumentMouseMove(event) {
+
+  var mouse = new THREE.Vector2();
+  mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+  mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+  var raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera( mouse, camera() );
+  var intersects = raycaster.intersectObjects( scene.children );
+
+  if(intersects.length > 0 && intersects[0].object.callback) {
+    gsap.set(document.body, { cursor: "pointer"})
+  } else {
+    gsap.set(document.body, { cursor: "default"})
+  }
+
+}
+
+function onDocumentMouseDown( event ) {
+  event.preventDefault();
+  mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
+  mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
+  raycaster.setFromCamera( mouse, camera() );
+
+  var intersects = raycaster.intersectObjects( scene.children );
+
+  if ( intersects.length > 0 && intersects[0].object.callback ) {
+      intersects[0].object.callback();
+  }}
+    
+window.addEventListener('click', onDocumentMouseDown, false);
+window.addEventListener('mousemove', onDocumentMouseMove, false);
 
 // LOOP
 const loop = () => {

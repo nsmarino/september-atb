@@ -43,3 +43,27 @@ body {
 
 .log { margin-left: 2rem;}
 
+#narrative-controller {
+  width: 500px;
+  height: 80px;
+  background: tan;
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.5rem 2rem;
+}
+p {
+  margin: 0;
+  font-family: sans-serif;
+}
+#narrative-controller .next-btn {
+  position: absolute;
+  right: 0;
+  bottom:0;
+}
+#narrative-controller .close-btn {
+  position: absolute;
+  right: 0;
+  top:0;
+}
+

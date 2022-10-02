@@ -134,6 +134,7 @@ gameObject.addMesh(boxMesh, scene)
 gameObject.addBody(boxBody, physicsWorld)
 
 
+myquat = new THREE.Quaternion(); // now, Probably from one of these:
 
 const clock = new THREE.Clock()
 // LOOP
